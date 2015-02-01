@@ -1,0 +1,215 @@
+/dts-v1/;
+
+/ {
+
+	videocore {
+
+		pins_cm {
+
+			pin_config {
+
+				pin@default {
+					polarity = "active_high";
+					termination = "pull_down";
+					startup_state = "inactive";
+					function = "input";
+				};
+
+				pin@p14 {
+					function = "uart0";
+					termination = "no_pulling";
+				};
+
+				pin@p15 {
+					function = "uart0";
+					termination = "pull_up";
+				};
+
+				pin@p28 {
+					function = "pcm";
+					termination = "no_pulling";
+				};
+
+				pin@p29 {
+					function = "pcm";
+					termination = "no_pulling";
+				};
+
+				pin@p30 {
+					function = "pcm";
+					termination = "no_pulling";
+				};
+
+				pin@p31 {
+					function = "pcm";
+					termination = "no_pulling";
+				};
+
+				pin@p32 {
+					function = "gp_clk";
+					termination = "no_pulling";
+				};
+
+				pin@p33 {
+					function = "output";
+					termination = "no_pulling";
+					polarity = "active_low";
+					startup_state = "inactive";
+				};
+
+				pin@p34 {
+					function = "input";
+					termination = "no_pulling";
+				};
+
+				pin@p35 {
+					function = "output";
+					termination = "no_pulling";
+					polarity = "active_high";
+					startup_state = "active";
+				};
+
+				pin@p36 {
+					function = "input";
+					termination = "no_pulling";
+				};
+
+				pin@p37 {
+					function = "input";
+					termination = "no_pulling";
+				};
+
+				pin@p39 {
+					function = "output";
+					termination = "no_pulling";
+					polarity = "active_high";
+					startup_state = "inactive";
+				};
+
+				pin@p40 {
+					function = "pwm";
+					termination = "no_pulling";
+				};
+
+				pin@p41 {
+					function = "output";
+					termination = "no_pulling";
+				};
+
+				pin@p42 {
+					function = "gp_clk";
+					termination = "no_pulling";
+				};
+
+				pin@p43 {
+					function = "output";
+					termination = "no_pulling";
+					polarity = "active_high";
+					startup_state = "active";
+				};
+
+				pin@p44 {
+					function = "i2c0";
+					termination = "no_pulling";
+				};
+
+				pin@p45 {
+					function = "i2c0";
+					termination = "no_pulling";
+				};
+
+				pin@p46 {
+					function = "input";
+					termination = "no_pulling";
+					polarity = "active_high";
+				};
+
+				pin@p47 {
+					function = "input";
+					termination = "no_pulling";
+				};
+
+				pin@p48 {
+					function = "sdcard";
+					termination = "pull_up";
+					drive_strength_mA = <0x8>;
+				};
+
+				pin@p49 {
+					function = "sdcard";
+					termination = "pull_up";
+					drive_strength_mA = <0x8>;
+				};
+
+				pin@p50 {
+					function = "sdcard";
+					termination = "pull_up";
+					drive_strength_mA = <0x8>;
+				};
+
+				pin@p51 {
+					function = "sdcard";
+					termination = "pull_up";
+					drive_strength_mA = <0x8>;
+				};
+
+				pin@p52 {
+					function = "sdcard";
+					termination = "pull_up";
+					drive_strength_mA = <0x8>;
+				};
+
+				pin@p53 {
+					function = "sdcard";
+					termination = "pull_up";
+					drive_strength_mA = <0x8>;
+				};
+			};
+
+			pin_defines {
+
+				pin_define@HDMI_CONTROL_ATTACHED {
+					type = "internal";
+					number = <0x2e>;
+				};
+
+				pin_define@LAN_RESET {
+					type = "internal";
+					number = <0x29>;
+				};
+
+			};
+		};
+
+		clock_routing {
+
+			vco@PLLA {
+				freq = <0x75300000>;
+			};
+
+			chan@APER {
+				div = <0x4>;
+			};
+
+		/*	clock@GPCLK0 {
+				pll = "PLLA";
+				chan = "APER";
+			};*/
+		};
+
+		clock_setup {
+
+			clock@PWM {
+				freq = <0x249f00>;
+			};
+
+			clock@GPCLK0 {
+				freq = <0xbb8000>;
+			};
+
+			clock@GPCLK1 {
+				freq = <0x17d7840>;
+			};
+		};
+	};
+};

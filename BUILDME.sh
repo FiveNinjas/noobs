@@ -43,6 +43,9 @@ cp output/images/rpi-firmware/bootcode.bin ../output
 cp output/images/cmdline.txt ../output/recovery.cmdline
 touch ../output/RECOVERY_FILES_DO_NOT_EDIT
 
+# Add Slice specific files
+dtc -O dtb -o ../output/dt-blob.bin board/raspberrypi/dt-blob.dts
+
 # Create build-date timestamp file containing Git HEAD info for build
 rm -f ../output/BUILT* || true
 BUILD_INFO="../output/BUILD-DATA"
