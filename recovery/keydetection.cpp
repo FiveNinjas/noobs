@@ -85,7 +85,7 @@ bool KeyDetection::_isF10pressed(int fd)
         qDebug() << "Error getting global key state";
     }
 
-    bool pressed = test_bit(KEY_F10, keymap) || test_bit(KEY_LEFTSHIFT, keymap) || test_bit(KEY_RIGHTSHIFT, keymap);
+    bool pressed = test_bit(KEY_F10, keymap) || test_bit(KEY_LEFTSHIFT, keymap) || test_bit(KEY_RIGHTSHIFT, keymap) || test_bit(KEY_ENTER, keymap); 
     //qDebug() << "Key press detection:" << pressed;
 
     return pressed;

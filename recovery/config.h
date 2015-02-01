@@ -6,7 +6,7 @@
 
 /* Color of the background */
 // #define BACKGROUND_COLOR  Qt::white
-#define BACKGROUND_COLOR  QColor(0xde, 0xde, 0xde)
+#define BACKGROUND_COLOR  QColor(0x00, 0x00, 0x00)
 
 /* Highlight color of installed OS */
 #define INSTALLED_OS_BACKGROUND_COLOR  QColor(0xef,0xff,0xef)
@@ -18,10 +18,10 @@
 #define ENABLE_LANGUAGE_CHOOSER
 
 /* Website launched when launching Arora */
-#define HOMEPAGE  "http://www.raspberrypi.org/help/"
+#define HOMEPAGE  "http://www.fiveninjas.com/"
 
 /* Location to download the list of available distributions from */
-#define DEFAULT_REPO_SERVER  "http://downloads.raspberrypi.org/os_list_v2.json"
+#define DEFAULT_REPO_SERVER  "http://updates.fiveninjas.com/os_list_v2.json"
 
 /* Size of recovery FAT partition in MB.
  * First partition starts at offset 1 MB (sector 2048)
@@ -37,7 +37,7 @@
 #define SETTINGS_PARTITION_SIZE  (32 * 2048)
 
 /* If the image name matches this exactly, mark it as recommended */
-#define RECOMMENDED_IMAGE "Raspbian"
+#define RECOMMENDED_IMAGE "Slice"
 
 #define FAT_PARTITION_OF_IMAGE  "/dev/mmcblk0p5"
 

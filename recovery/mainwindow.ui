@@ -119,13 +119,13 @@
      <normaloff>:/icons/backups.png</normaloff>:/icons/backups.png</iconset>
    </property>
    <property name="text">
-    <string>Install (i)</string>
+    <string>Install (Swap)</string>
    </property>
    <property name="toolTip">
     <string>Installs the selected operating system image onto this SD card.</string>
    </property>
    <property name="shortcut">
-    <string>I</string>
+    <string>Tab</string>
    </property>
   </action>
   <action name="actionCancel">
@@ -134,13 +134,13 @@
      <normaloff>:/icons/door_in.png</normaloff>:/icons/door_in.png</iconset>
    </property>
    <property name="text">
-    <string>Exit (Esc)</string>
+    <string>Exit (Option)</string>
    </property>
    <property name="toolTip">
     <string>Exits and boots the installed operating system.</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Esc</string>
+    <string notr="true">C</string>
    </property>
   </action>
   <action name="actionAdvanced">
@@ -164,13 +164,13 @@
      <normaloff>:/icons/page_white_edit.png</normaloff>:/icons/page_white_edit.png</iconset>
    </property>
    <property name="text">
-    <string>Edit config (e)</string>
+    <string>Edit config (Stop)</string>
    </property>
    <property name="toolTip">
     <string>Opens the config.txt and cmdline.txt for the installed OS in a text editor.</string>
    </property>
    <property name="shortcut">
-    <string notr="true">E</string>
+    <string notr="true">X</string>
    </property>
   </action>
   <action name="actionBrowser">
@@ -179,13 +179,13 @@
      <normaloff>:/icons/world.png</normaloff>:/icons/world.png</iconset>
    </property>
    <property name="text">
-    <string>Online help (h)</string>
+    <string>Online help (Backup)</string>
    </property>
    <property name="toolTip">
     <string>Opens a web browser displaying the Raspberry Pi Forum.</string>
    </property>
    <property name="shortcut">
-    <string notr="true">H</string>
+    <string notr="true">Backspace</string>
    </property>
   </action>
  </widget>
