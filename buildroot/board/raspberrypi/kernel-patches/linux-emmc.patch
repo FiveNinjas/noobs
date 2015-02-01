@@ -1,0 +1,11 @@
+--- a/drivers/mmc/core/mmc.c	2015-01-08 17:54:38.271183847 +0000
++++ b/drivers/mmc/core/mmc.c	2013-09-27 14:42:24.000000000 +0100
+@@ -292,7 +292,7 @@
+ 	}
+ 
+ 	card->ext_csd.rev = ext_csd[EXT_CSD_REV];
+-	if (card->ext_csd.rev > 7) {
++	if (card->ext_csd.rev > 6) {
+ 		pr_err("%s: unrecognised EXT_CSD revision %d\n",
+ 			mmc_hostname(card->host), card->ext_csd.rev);
+ 		err = -EINVAL;
