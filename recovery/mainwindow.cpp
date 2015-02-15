@@ -1419,12 +1419,12 @@ void MainWindow::startImageWrite()
         }
 
         slidesFolder.clear();
-        //QRect s = QApplication::desktop()->screenGeometry();
-        //if (s.width() > 640 && QFile::exists(folder+"/slides"))
-        //{
-        //    slidesFolder = folder+"/slides";
-        //}
-        if (QFile::exists(folder+"/slides_vga"))
+        QRect s = QApplication::desktop()->screenGeometry();
+        if (s.width() > 640 && QFile::exists(folder+"/slides"))
+        {
+            slidesFolder = folder+"/slides";
+        }
+	else if (QFile::exists(folder+"/slides_vga"))
         {
             slidesFolder = folder+"/slides_vga";
         }
