@@ -43,6 +43,8 @@ cp output/images/rpi-firmware/bootcode.bin ../output
 cp output/images/cmdline.txt ../output/recovery.cmdline
 touch ../output/RECOVERY_FILES_DO_NOT_EDIT
 
+dtc -O dtb -o ../output/dt-blob.bin board/raspberrypi/dt-blob.dts
+
 # Create build-date timestamp file containing Git HEAD info for build
 rm -f ../output/BUILT* || true
 BUILD_INFO="../output/BUILD-DATA"
@@ -52,7 +54,11 @@ echo "NOOBS Git HEAD @ "`git rev-parse --verify HEAD` >> "$BUILD_INFO"
 cat "$BUILDROOT_DL_DIR"/rpi-userland-head.version >> "$BUILD_INFO"
 cat "$BUILDROOT_DL_DIR"/rpi-firmware-head.version >> "$BUILD_INFO"
 
+cd ../output
+
+zip -r ../noobs.zip *
 cd ..
+
 
 clear
 echo "Build complete. Copy files in 'output' directory onto a clean FAT formatted SD card to use."
