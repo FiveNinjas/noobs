@@ -170,6 +170,8 @@ cp "$IMAGES_DIR/rpi-firmware/bootcode.bin" "$FINAL_OUTPUT_DIR"
 cp "$IMAGES_DIR/cmdline.txt" "$FINAL_OUTPUT_DIR/recovery.cmdline"
 touch "$FINAL_OUTPUT_DIR/RECOVERY_FILES_DO_NOT_EDIT"
 
+dtc -O dtb -o ../output/dt-blob.bin board/raspberrypi/dt-blob.dts
+
 # Create build-date timestamp file containing Git HEAD info for build
 BUILD_INFO="$FINAL_OUTPUT_DIR/BUILD-DATA"
 echo "Build-date: $(date +"%Y-%m-%d")" > "$BUILD_INFO"
@@ -179,7 +181,11 @@ echo "rpi-userland Git master @ $(get_package_version rpi-userland)" >> "$BUILD_
 echo "rpi-firmware Git master @ $(get_package_version rpi-firmware)" >> "$BUILD_INFO"
 echo "rpi-linux Git rpi-3.18.y @ $(get_kernel_version)" >> "$BUILD_INFO"
 
+cd ../output
+
+zip -r ../noobs.zip *
 cd ..
+
 
 clear
 echo "Build complete. Copy files in '$NOOBS_OUTPUT_DIR' directory onto a clean FAT formatted SD card to use."
