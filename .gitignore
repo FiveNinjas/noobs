@@ -1,3 +1,4 @@
+buildroot/board/raspberrypi/dt-blob.bin
 buildroot/output/
 buildroot/dl/
 output/
