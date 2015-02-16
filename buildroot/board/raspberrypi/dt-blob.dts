@@ -191,10 +191,10 @@
 				div = <0x4>;
 			};
 
-		/*	clock@GPCLK0 {
+			clock@GPCLK0 {
 				pll = "PLLA";
 				chan = "APER";
-			};*/
+			};
 		};
 
 		clock_setup {

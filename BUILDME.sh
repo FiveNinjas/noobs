@@ -55,7 +55,11 @@ echo "NOOBS Git HEAD @ "`git rev-parse --verify HEAD` >> "$BUILD_INFO"
 cat "$BUILDROOT_DL_DIR"/rpi-userland-head.version >> "$BUILD_INFO"
 cat "$BUILDROOT_DL_DIR"/rpi-firmware-head.version >> "$BUILD_INFO"
 
+cd ../output
+
+zip -r ../noobs.zip *
 cd ..
+
 
 clear
 echo "Build complete. Copy files in 'output' directory onto a clean FAT formatted SD card to use."
