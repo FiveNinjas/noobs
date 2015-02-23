@@ -18,9 +18,57 @@
   <property name="focusPolicy">
    <enum>Qt::NoFocus</enum>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QToolTip {
+	background-color: black;
+	color: white;
+	border: 1px solid #29abe2;
+	padding: 2 5;
+}
+
+QToolbar, QMenu {
+	background-color: #111111;
+	color: white;
+	border: 1px black;
+}
+
+QMessageBox {
+	background-color: black;
+	color: white;
+	border: 1px black;
+}
+
+QMessageBox QPushButton {
+	background-color: black;
+	color: #29abe2;
+	border: 2px solid #29abe2;
+	border-radius: 5;
+    padding: 8 15;
+}
+
+QDialog {
+	background-color: black;
+	color: white;
+	border: 2px solid #29abe2;
+}
+
+QWidget {
+background-color: #111111;
+color: white;
+}
+
+QMainWindow {
+background-color: #111111;
+border: 2px solid #29abe2;
+border-radius: 5px;
+}</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <property name="focusPolicy">
     <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
    </property>
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
@@ -29,6 +77,15 @@
        <font>
         <pointsize>12</pointsize>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QListWidget {
+background: #cccccc;
+color: black;
+border: 0;
+selection-color: white;
+selection-background-color: #29abe2;
+}</string>
       </property>
       <property name="spacing">
        <number>1</number>
@@ -40,8 +97,198 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>65</height>
+        <height>77</height>
        </size>
+      </property>
+      <property name="palette">
+       <palette>
+        <active>
+         <colorrole role="WindowText">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>46</red>
+            <green>141</green>
+            <blue>175</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Button">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>17</red>
+            <green>17</green>
+            <blue>17</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Text">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>46</red>
+            <green>141</green>
+            <blue>175</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="ButtonText">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>46</red>
+            <green>141</green>
+            <blue>175</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>17</red>
+            <green>17</green>
+            <blue>17</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Window">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>17</red>
+            <green>17</green>
+            <blue>17</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </active>
+        <inactive>
+         <colorrole role="WindowText">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>46</red>
+            <green>141</green>
+            <blue>175</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Button">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>17</red>
+            <green>17</green>
+            <blue>17</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Text">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>46</red>
+            <green>141</green>
+            <blue>175</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="ButtonText">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>46</red>
+            <green>141</green>
+            <blue>175</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>17</red>
+            <green>17</green>
+            <blue>17</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Window">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>17</red>
+            <green>17</green>
+            <blue>17</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </inactive>
+        <disabled>
+         <colorrole role="WindowText">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>46</red>
+            <green>141</green>
+            <blue>175</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Button">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>17</red>
+            <green>17</green>
+            <blue>17</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Text">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>46</red>
+            <green>141</green>
+            <blue>175</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="ButtonText">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>46</red>
+            <green>141</green>
+            <blue>175</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>17</red>
+            <green>17</green>
+            <blue>17</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Window">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>17</red>
+            <green>17</green>
+            <blue>17</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </disabled>
+       </palette>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">* {
+color: #2e8daf;
+}
+
+QGroupBox {
+border: 1px solid  #2e8daf;
+padding-top: 10px;
+min-height: 65;
+}
+
+QGroupBox:title {
+top: -8px;
+left: -3px;
+margin-top: 5px;
+}
+</string>
       </property>
       <property name="title">
        <string>Disk space</string>
@@ -56,6 +303,11 @@
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="availableLabel">
+         <property name="styleSheet">
+          <string notr="true">:text {
+color: #29abe2;
+}</string>
+         </property>
          <property name="text">
           <string>Available:</string>
          </property>
@@ -69,6 +321,28 @@
   <widget class="QToolBar" name="mainToolBar">
    <property name="focusPolicy">
     <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QToolButton {
+background-color: #111111;
+color: #666666;
+selected-color: white;
+selected-background-color:#29abe2;
+text-shadow: none;
+}
+
+QToolButton:enabled {
+color: white
+}
+
+QToolBar  {
+background-color: #111111;
+color: white;
+selected-color: white;
+selected-background-color:#29abe2;
+border: 0;
+padding: 3px;
+}</string>
    </property>
    <property name="movable">
     <bool>false</bool>
@@ -100,6 +374,13 @@
    <property name="windowTitle">
     <string/>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QToolBar {
+background: #111111;
+font: white;
+border: 0;
+}</string>
+   </property>
    <property name="toolButtonStyle">
     <enum>Qt::ToolButtonTextUnderIcon</enum>
    </property>
@@ -116,7 +397,7 @@
    </property>
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/icons/backups.png</normaloff>:/icons/backups.png</iconset>
+     <normaloff>:/icons/slice_install.png</normaloff>:/icons/slice_install.png</iconset>
    </property>
    <property name="text">
     <string>Install (Swap)</string>
@@ -131,7 +412,7 @@
   <action name="actionCancel">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/icons/door_in.png</normaloff>:/icons/door_in.png</iconset>
+     <normaloff>:/icons/exit.png</normaloff>:/icons/exit.png</iconset>
    </property>
    <property name="text">
     <string>Exit (Option)</string>
@@ -161,7 +442,7 @@
    </property>
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/icons/page_white_edit.png</normaloff>:/icons/page_white_edit.png</iconset>
+     <normaloff>:/icons/edit_config.png</normaloff>:/icons/edit_config.png</iconset>
    </property>
    <property name="text">
     <string>Edit config (Stop)</string>
@@ -176,7 +457,7 @@
   <action name="actionBrowser">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/icons/world.png</normaloff>:/icons/world.png</iconset>
+     <normaloff>:/icons/5ninjas_help.png</normaloff>:/icons/5ninjas_help.png</iconset>
    </property>
    <property name="text">
     <string>Online help (Backup)</string>

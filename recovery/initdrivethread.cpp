@@ -28,13 +28,13 @@ void InitDriveThread::run()
 {
     QDir dir;
 
-    emit statusUpdate("Waiting for SD card to be ready");
+    emit statusUpdate("<FONT COLOR='#FFFFFF'>Waiting for SD card to be ready</FONT>");
     while (!QFile::exists("/dev/mmcblk0"))
     {
         QThread::usleep(100);
     }
 
-    emit statusUpdate(tr("Mounting FAT partition"));
+    emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Mounting FAT partition</FONT>"));
     mountSystemPartition();
 
     //if (sizeofBootFilesInKB() > (MAXIMUM_BOOTFILES_SIZE*1024))
@@ -57,14 +57,14 @@ void InitDriveThread::run()
             //      }
 // }
 
-    emit statusUpdate(tr("Formatting settings partition"));
+    emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Formatting settings partition</FONT>"));
     if (!formatSettingsPartition())
     {
-        emit error(tr("Error formatting settings partition"));
+        emit error(tr("<FONT COLOR='#FFFFFF'>Error formatting settings partition</FONT>"));
     }
 
     dir.mkdir("/mnt/os");
-    emit statusUpdate(tr("Editing cmdline.txt"));
+    emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Editing cmdline.txt</FONT>"));
 
     QString cmdlinefilename = "/mnt/recovery.cmdline";
     if (!QFile::exists(cmdlinefilename))
@@ -87,20 +87,21 @@ void InitDriveThread::run()
 #ifdef RISCOS_BLOB_FILENAME
     if (QFile::exists(RISCOS_BLOB_FILENAME))
     {
-        emit statusUpdate(tr("Writing RiscOS blob"));
+        emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Writing RiscOS blob</FONT>"));
         if (!writeRiscOSblob())
         {
-            emit error(tr("Error writing RiscOS blob"));
+            emit error(tr("<FONT COLOR='#FFFFFF'>Error writing RiscOS blob</FONT>"));
             return;
         }
     }
 #endif
 
-    /* Finish writing */
-    emit statusUpdate(tr("Unmounting boot partition"));
+    /* Finish writ
+     * ing */
+    emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Unmounting boot partition</FONT>"));
     umountSystemPartition();
 
-    emit statusUpdate(tr("Finish writing to disk (sync)"));
+    emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Finish writing to disk (sync)</FONT>"));
     sync();
 
     /* Perform a quick test to verify our changes were written
@@ -110,7 +111,7 @@ void InitDriveThread::run()
     dc.write("3\n");
     dc.close();
 
-    emit statusUpdate(tr("Mounting boot partition again"));
+    emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Mounting boot partition again</FONT>"));
     mountSystemPartition();
 
     /* Verify that cmdline.txt was written correctly */
@@ -121,7 +122,7 @@ void InitDriveThread::run()
 
     if (cmdlineread != line)
     {
-        emit error(tr("SD card broken (writes do not persist)"));
+        emit error(tr("<FONT COLOR='#FFFFFF'>SD card broken (writes do not persist)</FONT>"));
         return;
     }
 
@@ -130,41 +131,41 @@ void InitDriveThread::run()
 
 bool InitDriveThread::method_reformatDrive()
 {
-    emit statusUpdate(tr("Saving boot files to memory"));
+    emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Saving boot files to memory</FONT>"));
     if (!saveBootFiles() )
     {
-        emit error(tr("Error saving boot files to memory. SD card may be damaged."));
+        emit error(tr("<FONT COLOR='#FFFFFF'>Error saving boot files to memory. SD card may be damaged.</FONT>"));
         return false;
     }
     if (!umountSystemPartition())
     {
-        emit error(tr("Error unmounting system partition."));
+        emit error(tr("<FONT COLOR='#FFFFFF'>Error unmounting system partition.</FONT>"));
         return false;
     }
 
-    emit statusUpdate(tr("Zeroing partition table"));
+    emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Zeroing partition table</FONT>"));
     if (!zeroMbr())
     {
-        emit error(tr("Error zero'ing MBR/GPT. SD card may be broken or advertising wrong capacity."));
+        emit error(tr("<FONT COLOR='#FFFFFF'>Error zero'ing MBR/GPT. SD card may be broken or advertising wrong capacity.</FONT>"));
         return false;
     }
 
-    emit statusUpdate(tr("Creating partitions"));
+    emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Creating partitions</FONT>"));
 
     if (!partitionDrive())
     {
-        emit error(tr("Error partitioning"));
+        emit error(tr("<FONT COLOR='#FFFFFF'>Error partitioning</FONT>"));
         return false;
     }
 
-    emit statusUpdate(tr("Formatting boot partition (fat)"));
+    emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Formatting boot partition (fat)</FONT>"));
     if (!formatBootPartition())
     {
-       emit error(tr("Error formatting boot partition (fat)"));
+       emit error(tr("<FONT COLOR='#FFFFFF'>Error formatting boot partition (fat)</FONT>"));
        return false;
     }
 
-    emit statusUpdate(tr("Copying boot files to storage"));
+    emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Copying boot files to storage</FONT>"));
     mountSystemPartition();
     restoreBootFiles();
 
@@ -189,21 +190,21 @@ bool InitDriveThread::method_resizePartitions()
         // Warn user that their SD card does not have an MBR and ask
         // if they would like us to create one for them
         QMessageBox::StandardButton answer;
-        emit query(tr("Would you like NOOBS to create one for you?\nWARNING: This will erase all data on your SD card"),
-                   tr("Error: No MBR present on SD Card"),
+        emit query(tr("<FONT COLOR='#FFFFFF'>Would you like NOOBS to create one for you?\nWARNING: This will erase all data on your SD card</FONT>"),
+                   tr("<FONT COLOR='#FFFFFF'>Error: No MBR present on SD Card</FONT>"),
                    &answer);
 
         if(answer == QMessageBox::Yes)
         {
-            emit statusUpdate(tr("Zeroing partition table"));
+            emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Zeroing partition table</FONT>"));
             if (!zeroMbr())
             {
-                emit error(tr("Error zero'ing MBR/GPT. SD card may be broken or advertising wrong capacity."));
+                emit error(tr("<FONT COLOR='#FFFFFF'>Error zero'ing MBR/GPT. SD card may be broken or advertising wrong capacity.</FONT>"));
                 return false;
             }
 
             // Create MBR containing single FAT partition
-            emit statusUpdate(tr("Writing new MBR"));
+            emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Writing new MBR</FONT>"));
             QProcess proc;
             proc.setProcessChannelMode(proc.MergedChannels);
             proc.start("/usr/sbin/parted /dev/mmcblk0 --script -- mktable msdos mkpartfs primary fat32 8192s -1");
@@ -211,7 +212,7 @@ bool InitDriveThread::method_resizePartitions()
             if (proc.exitCode() != 0)
             {
                 // Warn user if we failed to create an MBR on their card
-                emit error(tr("Error creating MBR")+"\n"+proc.readAll());
+                emit error(tr("<FONT COLOR='#FFFFFF'>Error creating MBR")+"\n"+proc.readAll()+"</FONT>");
                 return false;
             }
             qDebug() << "Created missing MBR on SD card. parted output:" << proc.readAll();
@@ -219,18 +220,18 @@ bool InitDriveThread::method_resizePartitions()
             // Advise user that their SD card has now been formatted
             // suitably for installing NOOBS and that they will have to
             // re-copy the files before rebooting
-            emit error(tr("SD card has now been formatted ready for NOOBS installation. Please re-copy the NOOBS files onto the card and reboot"));
+            emit error(tr("<FONT COLOR='#FFFFFF'>SD card has now been formatted ready for NOOBS installation. Please re-copy the NOOBS files onto the card and reboot</FONT>"));
             return false;
         }
         else
         {
-            emit error(tr("SD card has not been formatted correctly. Please reformat using the SD Association Formatting Tool and try again."));
+            emit error(tr("<FONT COLOR='#FFFFFF'>SD card has not been formatted correctly. Please reformat using the SD Association Formatting Tool and try again.</FONT>"));
             return false;
         }
 
     }
 
-    emit statusUpdate(tr("Removing partitions 2,3,4"));
+    emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Removing partitions 2,3,4</FONT>"));
 
     QFile f("/dev/mmcblk0");
     f.open(f.ReadWrite);
@@ -244,7 +245,7 @@ bool InitDriveThread::method_resizePartitions()
     f.close();
     QThread::msleep(500);
 
-    emit statusUpdate(tr("Resizing FAT partition"));
+    emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Resizing FAT partition</FONT>"));
 
     /* Relocating the start of the FAT partition is a write intensive operation
      * only move it when it is not aligned on a MiB boundary already */
@@ -263,13 +264,13 @@ bool InitDriveThread::method_resizePartitions()
 
     if (p.exitCode() != 0)
     {
-        emit error(tr("Error resizing existing FAT partition")+"\n"+p.readAll());
+        emit error(tr("<FONT COLOR='#FFFFFF'>Error resizing existing FAT partition</FONT>")+"\n"+p.readAll());
         return false;
     }
     qDebug() << "parted done, output:" << p.readAll();
     QThread::msleep(500);
 
-    emit statusUpdate(tr("Creating extended partition"));
+    emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Creating extended partition</FONT>"));
 
     mbr_table extended_mbr;
     QByteArray partitionTable;
@@ -308,7 +309,7 @@ bool InitDriveThread::method_resizePartitions()
     proc.waitForFinished(-1);
     if (proc.exitCode() != 0)
     {
-        emit error(tr("Error creating extended partition")+"\n"+proc.readAll());
+        emit error(tr("<FONT COLOR='#FFFFFF'>Error creating extended partition</FONT>")+"\n"+proc.readAll());
         return false;
     }
     qDebug() << "sfdisk done, output:" << proc.readAll();
@@ -325,10 +326,10 @@ bool InitDriveThread::method_resizePartitions()
 
     QProcess::execute("/sbin/mlabel p:RECOVERY");
 
-    emit statusUpdate(tr("Mounting FAT partition"));
+    emit statusUpdate(tr("<FONT COLOR='#FFFFFF'>Mounting FAT partition</FONT>"));
     if (!mountSystemPartition())
     {
-        emit error(tr("Error mounting system partition."));
+        emit error(tr("<FONT COLOR='#FFFFFF'>Error mounting system partition."));
         return false;
     }
 
@@ -377,7 +378,7 @@ bool InitDriveThread::umountSystemPartition()
 
 bool InitDriveThread::formatBootPartition()
 {
-    return QProcess::execute("/sbin/mkfs.fat -n RECOVERY /dev/mmcblk0p1") == 0;
+    return QProcess::execute("/sbin/mkdosfs -n RECOVERY /dev/mmcblk0p1") == 0;
 }
 
 bool InitDriveThread::formatSettingsPartition()

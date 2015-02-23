@@ -80,7 +80,7 @@ ConfEditDialog::ConfEditDialog(const QString &partition, QWidget *parent) :
     {
         QMessageBox::critical(this,
                               tr("Error"),
-                              tr("Error mounting boot partition"),
+                              tr("<FONT COLOR='#FFFFFF'>Error mounting boot partition</FONT>"),
                               QMessageBox::Close);
         return;
     }

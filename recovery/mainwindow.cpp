@@ -70,7 +70,7 @@ MainWindow::MainWindow(const QString &defaultDisplay, QSplashScreen *splash, QWi
     _activatedEth(false), _hasUSB(false), _numInstalledOS(0), _netaccess(NULL), _displayModeBox(NULL)
 {
     ui->setupUi(this);
-    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     setContextMenuPolicy(Qt::NoContextMenu);
     update_window_title();
     _kc << 0x01000013 << 0x01000013 << 0x01000015 << 0x01000015 << 0x01000012
@@ -89,8 +89,9 @@ MainWindow::MainWindow(const QString &defaultDisplay, QSplashScreen *splash, QWi
         _partInited = true;
         setEnabled(false);
         _qpd = new QProgressDialog( tr("Setting up SD card"), QString(), 0, 0, this);
+        _qpd->setStyleSheet( "QProgressDialog { background-color: black; color: white; border: 2px solid #29abe2; }" );
         _qpd->setWindowModality(Qt::WindowModal);
-        _qpd->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+        _qpd->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
 
         InitDriveThread *idt = new InitDriveThread(this);
         connect(idt, SIGNAL(statusUpdate(QString)), _qpd, SLOT(setLabelText(QString)));
@@ -143,8 +144,8 @@ void MainWindow::populate()
     /* Ask user to wait while list is populated */
     if (!_allowSilent)
     {
-        _qpd = new QProgressDialog(tr("Please wait while NOOBS initialises"), QString(), 0, 0, this);
-        _qpd->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+        _qpd = new QProgressDialog(tr("<FONT COLOR='#FFFFFF'>Please wait while NOOBS initialises</FONT>"), QString(), 0, 0, this);
+        _qpd->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
         _qpd->show();
         QTimer::singleShot(2000, this, SLOT(hideDialogIfNoNetwork()));
     }
@@ -155,16 +156,27 @@ void MainWindow::populate()
         if (QProcess::execute("mount -o remount,ro /settings")!=0
             && QProcess::execute("mount -o remount,rw /settings")!=0)
         {
-            if (QMessageBox::question(this,
-                                      tr("Error mounting settings partition"),
-                                      tr("Persistent settings partition seems corrupt. Reformat?"),
-                                      QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+
+            /* Set up custom icon in dialogue */
+            QMessageBox msg( QMessageBox::Question, tr("Error mounting settings partition"),tr("<FONT COLOR='#FFFFFF'>Persistent settings partition seems corrupt. Reformat?</FONT>"),QMessageBox::Yes|QMessageBox::No );
+            QPixmap exportIcon(":/icons/question.png");
+            msg.setIconPixmap(exportIcon);
+            msg.setWindowFlags( Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint );
+            msg.setStyleSheet( "QMessageBox { background-color: black; color: white; border: 2px solid #29abe2; } QMessageBox QPushButton { background-color: black; color: white; border: 2px solid #29abe2; border-radius: 5; padding: 8 15; }" );
+
+            if ( msg.exec() == QMessageBox::Yes )
             {
                 QProcess::execute("umount /settings");
                 if (QProcess::execute("/usr/sbin/mkfs.ext4 " SETTINGS_PARTITION) != 0
                     || QProcess::execute("mount " SETTINGS_PARTITION " /settings") != 0)
                 {
-                    QMessageBox::critical(this, tr("Reformat failed"), tr("SD card might be damaged"), QMessageBox::Close);
+                    /* Set up custom icon in dialogue */
+                    QMessageBox msg( QMessageBox::Critical, tr("Reformat failed"), tr("<FONT COLOR='#FFFFFF'>SD card might be damaged</FONT>"), QMessageBox::Close );
+                    QPixmap exportIcon(":/icons/error.png");
+                    msg.setIconPixmap(exportIcon);
+                    msg.setWindowFlags( Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint );
+                    msg.setStyleSheet( "QMessageBox { background-color: black; color: white; border: 2px solid #d92b2b; } QMessageBox QPushButton { background-color: black; color: white; border: 2px solid #d92b2b; border-radius: 5; padding: 8 15; }" );
+                    msg.exec();
                 }
 
                 rebuildInstalledList();
@@ -387,15 +399,24 @@ bool isSupportedOs(const QString& name, const QVariantMap& values)
         return true;
     }
 
+    qDebug() << "Is supported revision:";
+
     uint board_revision = readBoardRevision();
+
+    qDebug() << "Board revision = " << board_revision;
+
     if (values.find("supported_revisions") != values.end())
     {
         /* Check the supported revisions list */
         QStringList revisions = values.value("supported_revisions").toString().remove(" ").split(",");
+        qDebug() << "Found " << revisions.size() << " revisions";
         for (int i=0; i < revisions.size(); i++)
         {
             bool ok;
             uint rev = revisions.at(i).toUInt(&ok, 10);
+
+            qDebug() << "Check revision: " << revisions.at(i) << " ok=" << ok;
+
             if (ok)
             {
                 if ((rev & 0xffff) == (board_revision & 0xffff))
@@ -563,10 +584,16 @@ void MainWindow::on_actionWrite_image_to_disk_triggered()
 {
     remountSettingsRW();
 
-    if (_silent || QMessageBox::warning(this,
-                                        tr("Confirm"),
-                                        tr("Warning: this will install the selected Operating System(s). All existing data on the SD card will be overwritten, including any OSes that are already installed."),
-                                        QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+    /* Set up custom icon in dialogue */
+    QMessageBox msg( QMessageBox::Warning, tr("Confirm"), tr("<FONT COLOR='#FFFFFF'>Warning: this will install the selected Operating System(s). All existing data on the SD card will be overwritten, including any OSes that are already installed.</FONT>"),
+                              QMessageBox::Yes|QMessageBox::No );
+    QPixmap exportIcon(":/icons/warning.png");
+    msg.setIconPixmap(exportIcon);
+    msg.setWindowFlags( Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint );
+    msg.setStyleSheet( "QMessageBox { background-color: black; color: white; border: 2px solid #d6d647; } QMessageBox QPushButton { background-color: black; color: white; border: 2px solid #d6d647; border-radius: 5; padding: 8 15; }" );
+
+
+    if (_silent || msg.exec() == QMessageBox::Yes)
     {
         /* See if any of the OSes are unsupported */
         bool allSupported = true;
@@ -576,16 +603,20 @@ void MainWindow::on_actionWrite_image_to_disk_triggered()
         {
             QVariantMap entry = item->data(Qt::UserRole).toMap();
             QString name = entry.value("name").toString();
-            if (!isSupportedOs(name, entry))
-            {
+            if (!isSupportedOs(name, entry)) {
                 allSupported = false;
                 unsupportedOses += "\n" + name;
             }
         }
-        if (_silent || allSupported || QMessageBox::warning(this,
-                                        tr("Confirm"),
-                                        tr("Warning: incompatible Operating System(s) detected. The following OSes aren't supported on this revision of Raspberry Pi and may fail to boot or function correctly:") + unsupportedOses,
-                                        QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+
+        /* Set up custom icon in dialogue */
+        QMessageBox msg( QMessageBox::Warning, tr("Confirm"), tr("<FONT COLOR='#FFFFFF'>Warning: incompatible Operating System(s) detected. The following OSes aren't supported on this revision of Raspberry Pi and may fail to boot or function correctly:</FONT>") + unsupportedOses, QMessageBox::Yes|QMessageBox::No);
+        QPixmap exportIcon(":/icons/warning.png");
+        msg.setIconPixmap(exportIcon);
+        msg.setWindowFlags( Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint );
+        msg.setStyleSheet( "QMessageBox { background-color: black; color: white; border: 2px solid #d6d647; } QMessageBox QPushButton { background-color: black; color: white; border: 2px solid #d6d647; border-radius: 5; padding: 8 15; }" );
+
+        if (_silent || allSupported || msg.exec() == QMessageBox::Yes)
         {
             setEnabled(false);
             _numMetaFilesToDownload = 0;
@@ -625,7 +656,7 @@ void MainWindow::on_actionWrite_image_to_disk_triggered()
             else if (!_silent)
             {
                 _qpd = new QProgressDialog(tr("The install process will begin shortly."), QString(), 0, 0, this);
-                _qpd->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+                _qpd->setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
                 _qpd->show();
             }
         }
@@ -646,10 +677,18 @@ void MainWindow::onCompleted()
     settings.sync();
     QProcess::execute("mount -o remount,ro /settings");
 
-    if (!_silent)
-        QMessageBox::information(this,
-                                 tr("OS(es) installed"),
-                                 tr("OS(es) Installed Successfully"), QMessageBox::Ok);
+    if (!_silent) {
+        /* Set up custom icon in dialogue */
+        QMessageBox msg( QMessageBox::Information,
+                                      tr("OS(es) installed"),
+                                      tr("<FONT COLOR='#FFFFFF'>OS(es) Installed Successfully</FONT>"), QMessageBox::Ok );
+        QPixmap exportIcon(":/icons/info.png");
+        msg.setStyleSheet( "QMessageBox { background-color: black; color: white; border: 2px solid #29abe2; } QMessageBox QPushButton { background-color: black; color: white; border: 2px solid #29abe2; border-radius: 5; padding: 8 15; }" );
+        msg.setIconPixmap(exportIcon);
+        msg.setWindowFlags( Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint );
+        msg.exec();
+    }
+
     _qpd->deleteLater();
     _qpd = NULL;
     close();
@@ -658,13 +697,25 @@ void MainWindow::onCompleted()
 void MainWindow::onError(const QString &msg)
 {
     _qpd->hide();
-    QMessageBox::critical(this, tr("Error"), msg, QMessageBox::Close);
+    QString bodymessage = QString("<FONT COLOR='#FFFFFF'>") + msg + QString("</FONT>");
+
+    /* Set up custom icon in dialogue */
+    QMessageBox dialog( QMessageBox::Critical, tr("Error"), bodymessage, QMessageBox::Close );
+    QPixmap exportIcon(":/icons/error.png");
+    dialog.setIconPixmap(exportIcon);
+    dialog.setWindowFlags( Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint );
+    dialog.setStyleSheet( "QMessageBox { background-color: black; color: white; border: 2px solid #d92b2b; } QMessageBox QPushButton { background-color: black; color: white; border: 2px solid #d92b2b; border-radius: 5; padding: 8 15; }" );
+    dialog.exec();
+
     setEnabled(true);
 }
 
 void MainWindow::onQuery(const QString &msg, const QString &title, QMessageBox::StandardButton* answer)
 {
     _qpd->hide();
+    QString bodymessage = QString("<FONT COLOR='#FFFFFF'>") + msg + QString("</FONT>");
+
+    /* TODO: How to Style this!!*/
     *answer = QMessageBox::question(this, title, msg, QMessageBox::Yes|QMessageBox::No);
     setEnabled(true);
 }
@@ -776,10 +827,15 @@ void MainWindow::displayMode(int modenr, bool silent)
     // Inform user of resolution change with message box.
     if (!silent && _settings)
     {
+        /* Set up custom icon in dialogue */
         _displayModeBox = new QMessageBox(QMessageBox::Question,
-                      tr("Display Mode Changed"),
-                      tr("Display mode changed to %1\nWould you like to make this setting permanent?").arg(mode),
-                      QMessageBox::Yes | QMessageBox::No);
+                                          tr("Display Mode Changed"),
+                                          tr("<FONT COLOR='#FFFFFF'>Display mode changed to %1\nWould you like to make this setting permanent?</FONT>").arg(mode),
+                                          QMessageBox::Yes|QMessageBox::No );
+        QPixmap exportIcon(":/icons/question.png");
+        _displayModeBox->setIconPixmap(exportIcon);
+        _displayModeBox->setWindowFlags( Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint );
+        _displayModeBox->setStyleSheet( "QMessageBox { background-color: black; color: white; border: 2px solid #29abe2; } QMessageBox QPushButton { background-color: black; color: white; border: 2px solid #29abe2; border-radius: 5; padding: 8 15; }" );
         _displayModeBox->installEventFilter(this);
         _displayModeBox->exec();
 
@@ -796,7 +852,7 @@ void MainWindow::displayMode(int modenr, bool silent)
     /*
     QMessageBox *mbox = new QMessageBox;
     mbox->setWindowTitle(tr("Display Mode Changed"));
-    mbox->setText(QString(tr("Display mode changed to %1")).arg(mode));
+    mbox->setText(QString(tr("<FONT COLOR='#FFFFFF'>Display mode changed to %1</FONT>")).arg(mode));
     mbox->setStandardButtons(0);
     mbox->show();
     QTimer::singleShot(2000, mbox, SLOT(hide()));
@@ -897,10 +953,17 @@ bool MainWindow::requireNetwork()
 {
     if (!QFile::exists("/tmp/resolv.conf"))
     {
-        QMessageBox::critical(this,
-                              tr("No network access"),
-                              tr("Wired network access is required for this feature. Please insert a network cable into the network port."),
-                              QMessageBox::Close);
+        /* Set up custom icon in dialogue */
+        QMessageBox msg(  QMessageBox::Critical,
+                                                tr("No network access"),
+                                                tr("<FONT COLOR='#FFFFFF'>Wired network access is required for this feature. Please insert a network cable into the network port.</FONT>"),
+                                                QMessageBox::Close );
+        QPixmap exportIcon(":/icons/error.png");
+        msg.setIconPixmap(exportIcon);
+        msg.setStyleSheet( "QMessageBox { background-color: black; color: white; border: 2px solid #d92b2b; } QMessageBox QPushButton { background-color: black; color: white; border: 2px solid #d92b2b; border-radius: 5; padding: 8 15; }" );
+        msg.setWindowFlags( Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint );
+        msg.exec();
+
         return false;
     }
 
@@ -1043,7 +1106,15 @@ void MainWindow::downloadListComplete()
     if (reply->error() != reply->NoError || httpstatuscode < 200 || httpstatuscode > 399)
     {
         _qpd->hide();
-        QMessageBox::critical(this, tr("Download error"), tr("Error downloading distribution list from Internet"), QMessageBox::Close);
+
+        /* Set up custom icon in dialogue */
+        QMessageBox msg( QMessageBox::Critical, tr("Download error"), tr("Error downloading distribution list from Internet"), QMessageBox::Close);
+        QPixmap exportIcon(":/icons/error.png");
+        msg.setIconPixmap(exportIcon);
+        msg.setStyleSheet( "QMessageBox { background-color: black; color: white; border: 2px solid #d92b2b; } QMessageBox QPushButton { background-color: black; color: white; border: 2px solid #d92b2b; border-radius: 5; padding: 8 15; }" );
+        msg.setWindowFlags( Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint );
+        msg.exec();
+
     }
     else
     {
@@ -1057,7 +1128,14 @@ void MainWindow::processJson(QVariant json)
 {
     if (json.isNull())
     {
-        QMessageBox::critical(this, tr("Error"), tr("Error parsing list.json downloaded from server"), QMessageBox::Close);
+        /* Set up custom icon in dialogue */
+        QMessageBox msg( QMessageBox::Critical, tr("Error"), tr("<FONT COLOR='#FFFFFF'>Error parsing list.json downloaded from server</FONT>"), QMessageBox::Close );
+        QPixmap exportIcon(":/icons/error.png");
+        msg.setIconPixmap(exportIcon);
+        msg.setStyleSheet( "QMessageBox { background-color: black; color: white; border: 2px solid #d92b2b; } QMessageBox QPushButton { background-color: black; color: white; border: 2px solid #d92b2b; border-radius: 5; padding: 8 15; }" );
+        msg.setWindowFlags( Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint );
+        msg.exec();
+
         return;
     }
 
@@ -1206,7 +1284,7 @@ void MainWindow::downloadIconComplete()
 
     if (reply->error() != reply->NoError || httpstatuscode < 200 || httpstatuscode > 399)
     {
-        //QMessageBox::critical(this, tr("Download error"), tr("Error downloading icon '%1'").arg(reply->url().toString()), QMessageBox::Close);
+        //QMessageBox::critical(this, tr("Download error"), tr("<FONT COLOR='#FFFFFF'>Error downloading icon '%1</FONT>'").arg(reply->url().toString()), QMessageBox::Close);
         qDebug() << "Error downloading icon" << url;
     }
     else
@@ -1382,7 +1460,15 @@ void MainWindow::downloadMetaComplete()
             _qpd->deleteLater();
             _qpd = NULL;
         }
-        QMessageBox::critical(this, tr("Download error"), tr("Error downloading meta file")+"\n"+reply->url().toString(), QMessageBox::Close);
+
+        /* Set up custom icon in dialogue */
+        QMessageBox msg( QMessageBox::Critical, tr("Download error"), tr("<FONT COLOR='#FFFFFF'>Error downloading meta file</FONT>")+"\n"+reply->url().toString(), QMessageBox::Close );
+        QPixmap exportIcon(":/icons/error.png");
+        msg.setIconPixmap(exportIcon);
+        msg.setStyleSheet( "QMessageBox { background-color: black; color: white; border: 2px solid #d92b2b; } QMessageBox QPushButton { background-color: black; color: white; border: 2px solid #d92b2b; border-radius: 5; padding: 8 15; }" );
+        msg.setWindowFlags( Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint );
+        msg.exec();
+
         setEnabled(true);
     }
     else
@@ -1392,7 +1478,14 @@ void MainWindow::downloadMetaComplete()
         f.open(f.WriteOnly);
         if (f.write(reply->readAll()) == -1)
         {
-            QMessageBox::critical(this, tr("Download error"), tr("Error writing downloaded file to SD card. SD card or file system may be damaged."), QMessageBox::Close);
+            /* Set up custom icon in dialogue */
+            QMessageBox msg( QMessageBox::Critical, tr("Download error"), tr("<FONT COLOR='#FFFFFF'>Error writing downloaded file to SD card. SD card or file system may be damaged.</FONT>"), QMessageBox::Close );
+            QPixmap exportIcon(":/icons/error.png");
+            msg.setIconPixmap(exportIcon);
+            msg.setStyleSheet( "QMessageBox { background-color: black; color: white; border: 2px solid #d92b2b; } QMessageBox QPushButton { background-color: black; color: white; border: 2px solid #d92b2b; border-radius: 5; padding: 8 15; }" );
+            msg.setWindowFlags( Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint );
+            msg.exec();
+
             setEnabled(true);
         }
         else
@@ -1505,10 +1598,17 @@ void MainWindow::hideDialogIfNoNetwork()
             if (ui->list->count() == 0)
             {
                 /* No local images either */
-                QMessageBox::critical(this,
-                                      tr("No network access"),
-                                      tr("Wired network access is required to use NOOBS without local images. Please insert a network cable into the network port."),
-                                      QMessageBox::Close);
+
+                /* Set up custom icon in dialogue */
+                QMessageBox msg(  QMessageBox::Critical,
+                                                        tr("No network access"),
+                                                        tr("<FONT COLOR='#FFFFFF'>Wired network access is required to use NOOBS without local images. Please insert a network cable into the network port.</FONT>"),
+                                                        QMessageBox::Close );
+                QPixmap exportIcon(":/icons/error.png");
+                msg.setIconPixmap(exportIcon);
+                msg.setStyleSheet( "QMessageBox { background-color: black; color: white; border: 2px solid #d92b2b; } QMessageBox QPushButton { background-color: black; color: white; border: 2px solid #d92b2b; border-radius: 5; padding: 8 15; }" );
+                msg.setWindowFlags( Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint );
+                msg.exec();
             }
         }
     }

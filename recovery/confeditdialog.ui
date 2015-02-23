@@ -21,6 +21,14 @@
   <property name="windowTitle">
    <string>Config editor</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">* {
+background: black;
+color: white;
+border: 0;
+}
+</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget"/>

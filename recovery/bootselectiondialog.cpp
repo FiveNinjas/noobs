@@ -40,7 +40,7 @@ BootSelectionDialog::BootSelectionDialog(const QString &defaultPartition, QWidge
 
     if (QProcess::execute("mount -t ext4 -o ro " SETTINGS_PARTITION " /settings") != 0)
     {
-        QMessageBox::critical(this, tr("Cannot display boot menu"), tr("Error mounting settings partition"));
+        QMessageBox::critical(this, tr("Cannot display boot menu"), tr("<FONT COLOR='#FFFFFF'>Error mounting settings partition</FONT>"));
         return;
     }
 

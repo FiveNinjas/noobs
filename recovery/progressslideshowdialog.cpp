@@ -30,7 +30,9 @@ ProgressSlideshowDialog::ProgressSlideshowDialog(const QStringList &slidesDirect
     if (s.height() < 400)
         setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
     else
-        setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+        setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
+
+    setStyleSheet("QApplication { border: 2px solid #29abe2; }");
 
     foreach (QString slidesDirectory, slidesDirectories)
     {

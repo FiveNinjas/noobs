@@ -34,7 +34,7 @@
 #define MAXIMUM_BOOTFILES_SIZE  64
 
 #define SETTINGS_PARTITION  "/dev/mmcblk0p3"
-#define SETTINGS_PARTITION_SIZE  (32 * 2048)
+#define SETTINGS_PARTITION_SIZE  (1024*1024*6)
 
 #define USB_MOUNTPOINT "/media/usb"
 #define USB_DEVICE "/dev/sda1"
