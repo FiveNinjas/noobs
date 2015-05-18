@@ -24,6 +24,7 @@ define RECOVERY_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 0644 package/recovery/interfaces $(TARGET_DIR)/etc/network/interfaces
 	rm $(TARGET_DIR)/init || true
 	$(INSTALL) -m 0755 package/recovery/init $(TARGET_DIR)/init
+	$(INSTALL) -m 0755 package/recovery/noobs_update $(TARGET_DIR)/usr/bin/noobs_update
 	rm -f $(TARGET_DIR)/usr/lib/fonts/*
 	mkdir -p $(TARGET_DIR)/usr/lib/fonts/
 	$(INSTALL) -m 0755 package/recovery/unicode-fonts/DejaVuSans.ttf $(TARGET_DIR)/usr/lib/fonts/DejaVuSans.ttf
