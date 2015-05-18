@@ -34,5 +34,7 @@
         <file>icons/error.png</file>
         <file>icons/info.png</file>
         <file>icons/warning.png</file>
+        <file>icons/bomb.png</file>
+        <file>icons/slice_update.png</file>
     </qresource>
 </RCC>
